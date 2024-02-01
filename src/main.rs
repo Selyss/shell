@@ -1,5 +1,7 @@
+use std::env;
 use std::io;
 use std::io::Write;
+use std::path::Path;
 use std::process::Command;
 
 fn main() {
@@ -16,8 +18,20 @@ fn main() {
         let command = parts.next().unwrap();
         let args = parts;
 
-        let mut child = Command::new(command).args(args).spawn().unwrap();
+        match command {
+            "cd" => {
+                // goes to "/" by default
+                let target = args.peekable().peek().map_or("/", |x| *x);
+                let root = Path::new(target);
 
-        child.wait().expect("Failed to wait for child process"); // wait for commands to be done, like a queue
+                if let Err(e) = env::set_current_dir(&root) {
+                    eprintln!("{}", e);
+                }
+            }
+            command => {
+                let mut child = Command::new(command).args(args).spawn().unwrap();
+                child.wait().expect("Failed to wait for child process"); // wait for commands to be done, like a queue
+            }
+        }
     }
 }
