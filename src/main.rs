@@ -2,36 +2,72 @@ use std::env;
 use std::io;
 use std::io::Write;
 use std::path::Path;
-use std::process::Command;
+use std::process::{Child, Command, Stdio};
 
 fn main() {
     loop {
         print!("> "); // prompt
-        io::stdout().flush().unwrap();
+        io::stdout().flush();
 
         let mut input = String::new();
         io::stdin()
             .read_line(&mut input)
             .expect("Failed to read input");
 
-        let mut parts = input.trim().split_whitespace();
-        let command = parts.next().unwrap();
-        let args = parts;
+        let mut commands = input.trim().split(" | ").peekable();
+        let mut prev_command = None;
 
-        match command {
-            "cd" => {
-                // goes to "/" by default
-                let target = args.peekable().peek().map_or("/", |x| *x);
-                let root = Path::new(target);
+        while let Some(command) = commands.next() {
+            let mut parts = command.trim().split_whitespace();
+            let command = parts.next().unwrap();
+            let args = parts;
 
-                if let Err(e) = env::set_current_dir(&root) {
-                    eprintln!("{}", e);
+            match command {
+                "cd" => {
+                    // goes to "/" by default
+                    let target = args.peekable().peek().map_or("/", |x| *x);
+                    let root = Path::new(target);
+
+                    if let Err(e) = env::set_current_dir(&root) {
+                        eprintln!("{}", e);
+                    }
+                }
+                "exit" => return,
+                command => {
+                    let stdin = prev_command.map_or(Stdio::inherit(), |output: Child| {
+                        Stdio::from(output.stdout.unwrap())
+                    });
+
+                    let stdout = if commands.peek().is_some() {
+                        // check if another command is piped behind
+
+                        Stdio::piped()
+                    } else {
+                        // no more pipes
+                        Stdio::inherit()
+                    };
+
+                    let output = Command::new(command)
+                        .args(args)
+                        .stdin(stdin)
+                        .stdout(stdout)
+                        .spawn();
+
+                    match output {
+                        Ok(output) => {
+                            prev_command = Some(output);
+                        }
+                        Err(e) => {
+                            prev_command = None;
+                            eprintln!("{}", e);
+                        }
+                    };
                 }
             }
-            command => {
-                let mut child = Command::new(command).args(args).spawn().unwrap();
-                child.wait().expect("Failed to wait for child process"); // wait for commands to be done, like a queue
-            }
+        }
+        if let Some(mut final_command) = prev_command {
+            // block until the last command is done
+            final_command.wait();
         }
     }
 }
