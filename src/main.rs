@@ -1,4 +1,5 @@
 use std::io;
+use std::process::Command;
 
 fn main() {
     let mut input = String::new();
@@ -8,5 +9,5 @@ fn main() {
 
     let command = input.trim();
 
-    println!("{}", command)
+    Command::new(command).spawn().unwrap();
 }
