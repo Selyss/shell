@@ -1,13 +1,21 @@
 use std::io;
+use std::io::Write;
 use std::process::Command;
 
 fn main() {
-    let mut input = String::new();
-    io::stdin()
-        .read_line(&mut input)
-        .expect("Failed to read input");
+    loop {
+        print!("> "); // prompt
+        io::stdout().flush().unwrap();
 
-    let command = input.trim();
+        let mut input = String::new();
+        io::stdin()
+            .read_line(&mut input)
+            .expect("Failed to read input");
 
-    Command::new(command).spawn().unwrap();
+        let command = input.trim();
+
+        let mut child = Command::new(command).spawn().unwrap();
+
+        child.wait().expect("Failed to wait for child process"); // wait for commands to be done, like a queue
+    }
 }
