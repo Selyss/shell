@@ -3,6 +3,7 @@ use std::io;
 use std::io::Write;
 use std::path::Path;
 use std::process::{Child, Command, Stdio};
+use sysinfo::{CpuRefreshKind, RefreshKind, System};
 
 fn main() {
     loop {
@@ -43,6 +44,7 @@ fn main() {
                             let extension: &str =
                                 file.to_str().and_then(|s| s.split('.').last()).unwrap();
                             let filetype = match extension.to_lowercase().as_str() {
+                                // at some point for languages just say the extension again... or support idk
                                 "jpeg" | "jpg" => "JPEG image",
                                 "png" => "PNG image",
                                 "gif" => "GIF animation",
@@ -50,6 +52,7 @@ fn main() {
                                 "py" => "Python file",
                                 "rs" => "Rust file",
                                 "md" => "Markdown file",
+                                // maybe find a way to differentiate?
                                 _ => "Binary executable or unsupported",
                             };
                             println!("File type: {}", filetype)
@@ -58,6 +61,17 @@ fn main() {
                         println!("{} does not exist", file.display());
                     }
                 }
+                "sysinfo" => {
+                    let mut sys = System::new_all();
+                    sys.refresh_all();
+                    let s = System::new_with_specifics(
+                        RefreshKind::new().with_cpu(CpuRefreshKind::everything()),
+                    );
+                    println!("OS: {}", System::name().unwrap());
+                    println!("CPU: {}", s.cpus()[0].brand());
+                    println!("MEM: {}", sys.total_memory()); // TODO: convert to GB
+                }
+
                 "exit" => return,
                 command => {
                     let stdin = prev_command.map_or(Stdio::inherit(), |output: Child| {
