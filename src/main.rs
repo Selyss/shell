@@ -1,7 +1,8 @@
 use std::env;
 use std::fs;
+use std::fs::File;
 use std::io;
-use std::io::Write;
+use std::io::{BufRead, BufReader, Write};
 use std::path::Path;
 use std::process::{Child, Command, Stdio};
 use sysinfo::{CpuRefreshKind, RefreshKind, System};
@@ -74,15 +75,15 @@ fn main() {
                 }
                 "wordcount" => {
                     let target = args.peekable().peek().map_or("", |x| *x);
-                    let file = Path::new(target);
-                    if file.exists() {
-                        if file.is_dir() {
-                            println!("{} is a directory", file.display());
+                    let path = Path::new(target);
+                    if path.exists() {
+                        if path.is_dir() {
+                            println!("{} is a directory", path.display());
                         } else {
                             todo!();
                         }
                     } else {
-                        println!("{} does not exist", file.display());
+                        println!("{} does not exist", path.display());
                     }
                 }
                 "filesize" => {
@@ -103,7 +104,6 @@ fn main() {
                     // take in command and args :TODO
                     if let Ok(result) = amount.parse::<i32>() {
                         println!("{}", result);
-                        todo!();
                     }
                 }
                 "note" => {
@@ -124,7 +124,16 @@ fn main() {
                     todo!();
                 }
                 "create" => {
-                    todo!();
+                    let target = args.peekable().peek().map_or("", |x| *x);
+                    let file = Path::new(target);
+                    if file.exists() {
+                        if file.is_dir() {
+                            println!("{} is a directory", file.display());
+                        } else {
+                        }
+                    } else {
+                        println!("{} does not exist", file.display());
+                    }
                 }
                 "delete" => {
                     // make safer
