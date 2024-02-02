@@ -1,6 +1,5 @@
 use std::env;
 use std::fs;
-use std::fs::File;
 use std::io;
 use std::io::{BufRead, BufReader, Write};
 use std::path::Path;
@@ -30,7 +29,6 @@ fn main() {
 
             match command {
                 "cd" => {
-                    filetype::testt();
                     // goes to "/" by default
                     let target = args.peekable().peek().map_or("/", |x| *x);
                     let root = Path::new(target);
@@ -41,26 +39,13 @@ fn main() {
                 }
                 "filetype" => {
                     let target = args.peekable().peek().map_or("", |x| *x);
-                    let file = Path::new(target);
+                    let file: &Path = Path::new(target);
 
                     if file.exists() {
                         if file.is_dir() {
                             println!("{} is a directory", file.display());
                         } else {
-                            let extension: &str =
-                                file.to_str().and_then(|s| s.split('.').last()).unwrap();
-                            let filetype = match extension.to_lowercase().as_str() {
-                                // at some point for languages just say the extension again... or support idk
-                                "jpeg" | "jpg" => "JPEG image",
-                                "png" => "PNG image",
-                                "gif" => "GIF animation",
-                                "txt" => "Text file",
-                                "py" => "Python file",
-                                "rs" => "Rust file",
-                                "md" => "Markdown file",
-                                // maybe find a way to differentiate?
-                                _ => "Binary executable or unsupported",
-                            };
+                            let filetype = filetype::file_extension(file);
                             println!("File type: {}", filetype)
                         }
                     } else {

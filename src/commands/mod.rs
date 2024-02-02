@@ -1,2 +1,2 @@
-pub use self::filetype::testt;
+pub use self::filetype::file_extension;
 pub mod filetype;
