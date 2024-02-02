@@ -7,6 +7,9 @@ use std::path::Path;
 use std::process::{Child, Command, Stdio};
 use sysinfo::{CpuRefreshKind, RefreshKind, System};
 
+mod commands;
+use crate::commands::filetype;
+
 fn main() {
     loop {
         print!("> "); // prompt
@@ -27,6 +30,7 @@ fn main() {
 
             match command {
                 "cd" => {
+                    filetype::testt();
                     // goes to "/" by default
                     let target = args.peekable().peek().map_or("/", |x| *x);
                     let root = Path::new(target);
