@@ -71,7 +71,65 @@ fn main() {
                     println!("CPU: {}", s.cpus()[0].brand());
                     println!("MEM: {}", sys.total_memory()); // TODO: convert to GB
                 }
-
+                "wordcount" => {
+                    todo!();
+                }
+                "filesize" => {
+                    todo!();
+                }
+                "calc" => {
+                    todo!();
+                }
+                "rand" => {
+                    todo!();
+                }
+                "datetime" => {
+                    todo!();
+                }
+                "repeat" => {
+                    todo!();
+                }
+                "note" => {
+                    // and all the other shownotes and stuff
+                    todo!();
+                }
+                "search" => {
+                    todo!();
+                }
+                "rename" => {
+                    todo!();
+                }
+                "copy" => {
+                    todo!();
+                }
+                "move" => {
+                    todo!();
+                }
+                "create" => {
+                    todo!();
+                }
+                "delete" => {
+                    // make safer
+                    todo!();
+                }
+                "permissions" => {
+                    todo!();
+                }
+                "fileinfo" => {
+                    todo!();
+                }
+                "preview" => {
+                    todo!();
+                }
+                "alias" => {
+                    todo!();
+                }
+                "setenv" => {
+                    todo!();
+                }
+                "help" => {
+                    todo!();
+                }
                 "exit" => return,
                 command => {
                     let stdin = prev_command.map_or(Stdio::inherit(), |output: Child| {
