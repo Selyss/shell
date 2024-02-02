@@ -1,4 +1,5 @@
 use std::env;
+use std::fs;
 use std::io;
 use std::io::Write;
 use std::path::Path;
@@ -72,12 +73,23 @@ fn main() {
                     println!("MEM: {}", sys.total_memory()); // TODO: convert to GB
                 }
                 "wordcount" => {
-                    todo!();
+                    let target = args.peekable().peek().map_or("", |x| *x);
+                    let file = Path::new(target);
+                    if file.exists() {
+                        if file.is_dir() {
+                            println!("{} is a directory", file.display());
+                        } else {
+                            todo!();
+                        }
+                    } else {
+                        println!("{} does not exist", file.display());
+                    }
                 }
                 "filesize" => {
                     todo!();
                 }
                 "calc" => {
+                    // need to parse any amount of args?
                     todo!();
                 }
                 "rand" => {
@@ -87,6 +99,7 @@ fn main() {
                     todo!();
                 }
                 "repeat" => {
+                    // get repeat arg, look over the amount
                     todo!();
                 }
                 "note" => {
@@ -119,7 +132,18 @@ fn main() {
                     todo!();
                 }
                 "preview" => {
-                    todo!();
+                    let target = args.peekable().peek().map_or("", |x| *x);
+                    let file = Path::new(target);
+                    if file.exists() {
+                        if file.is_dir() {
+                            println!("{} is a directory", file.display());
+                        } else {
+                            let contents = fs::read_to_string(file).expect("Unable to read file");
+                            println!("Contents: \n\n{}", contents)
+                        }
+                    } else {
+                        println!("{} does not exist", file.display());
+                    }
                 }
                 "alias" => {
                     todo!();
