@@ -1,1 +1,5 @@
 # shell
+
+Goals:
+
+- cross platform

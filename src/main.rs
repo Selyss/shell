@@ -99,14 +99,19 @@ fn main() {
                     todo!();
                 }
                 "repeat" => {
-                    // get repeat arg, look over the amount
-                    todo!();
+                    let amount: &str = args.peekable().peek().map_or("", |x| *x);
+                    // take in command and args :TODO
+                    if let Ok(result) = amount.parse::<i32>() {
+                        println!("{}", result);
+                        todo!();
+                    }
                 }
                 "note" => {
                     // and all the other shownotes and stuff
                     todo!();
                 }
                 "search" => {
+                    // IDK if i want to implement this myself. May just grep.
                     todo!();
                 }
                 "rename" => {
