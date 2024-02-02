@@ -32,6 +32,21 @@ fn main() {
                         eprintln!("{}", e);
                     }
                 }
+                "filetype" => {
+                    let target = args.peekable().peek().map_or("", |x| *x);
+                    let file = Path::new(target);
+
+                    if file.exists() {
+                        if file.is_dir() {
+                            println!("{} is a directory", file.display());
+                        } else {
+                            let filetype = file.to_str().and_then(|s| s.split('.').last()).unwrap();
+                            println!("{}", filetype);
+                        }
+                    } else {
+                        println!("{} does not exist", file.display());
+                    }
+                }
                 "exit" => return,
                 command => {
                     let stdin = prev_command.map_or(Stdio::inherit(), |output: Child| {
