@@ -40,8 +40,19 @@ fn main() {
                         if file.is_dir() {
                             println!("{} is a directory", file.display());
                         } else {
-                            let filetype = file.to_str().and_then(|s| s.split('.').last()).unwrap();
-                            println!("{}", filetype);
+                            let extension: &str =
+                                file.to_str().and_then(|s| s.split('.').last()).unwrap();
+                            let filetype = match extension.to_lowercase().as_str() {
+                                "jpeg" | "jpg" => "JPEG image",
+                                "png" => "PNG image",
+                                "gif" => "GIF animation",
+                                "txt" => "Text file",
+                                "py" => "Python file",
+                                "rs" => "Rust file",
+                                "md" => "Markdown file",
+                                _ => "Binary executable or unsupported",
+                            };
+                            println!("File type: {}", filetype)
                         }
                     } else {
                         println!("{} does not exist", file.display());
