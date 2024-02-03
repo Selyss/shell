@@ -14,6 +14,12 @@ fn verify_path(file: &Path) -> bool {
 
 pub fn delete(file: &Path) {
     if !verify_path(file) {
+        println!("Path not verified");
+        return;
+    }
+
+    if file.to_str().unwrap().is_empty() {
+        println!("Path is empty");
         return;
     }
 
@@ -23,7 +29,7 @@ pub fn delete(file: &Path) {
         io::stdin()
             .read_line(&mut ans)
             .expect("Failed to read line");
-        if ans.to_lowercase() == "y" {
+        if ans.to_lowercase().trim() == "y" {
             // user wants to remove all dir contents
             println!(
                 "Remove this directory and ALL contents? This operation is NOT reversable (Y/N): "
@@ -32,18 +38,18 @@ pub fn delete(file: &Path) {
                 .read_line(&mut ans)
                 .expect("Failed to read line");
 
-            if ans.to_lowercase() == "y" {
+            if ans.to_lowercase().trim() == "y" {
                 fs::remove_dir_all(file).expect("Unable to remove all file contents");
                 println!("Removed directory '{}' and all contents", file.display());
             }
-        } else if ans.to_lowercase() == "n" {
+        } else if ans.to_lowercase().trim() == "n" {
             // user wants to remove empty dir
             println!("Remove this empty directory? This operation is NOT reversable (Y/N): ");
             io::stdin()
                 .read_line(&mut ans)
                 .expect("Failed to read line");
 
-            if ans.to_lowercase() == "y" {
+            if ans.to_lowercase().trim() == "y" {
                 fs::remove_dir(file).expect("Unable to remove all file contents");
                 println!("Removed empty directory '{}'", file.display());
             }
@@ -55,7 +61,7 @@ pub fn delete(file: &Path) {
             .read_line(&mut ans)
             .expect("Failed to read line");
 
-        if ans.to_lowercase() == "y" {
+        if ans.to_lowercase().trim() == "y" {
             fs::remove_file(file).expect("Unable to remove file");
             println!("Removed file '{}'", file.display());
         }
