@@ -8,6 +8,7 @@ use std::process::{Child, Command, Stdio};
 use sysinfo::{CpuRefreshKind, RefreshKind, System};
 
 mod commands;
+use crate::commands::filesize;
 use crate::commands::filetype;
 use crate::commands::wordcount;
 
@@ -81,7 +82,17 @@ fn main() {
                     }
                 }
                 "filesize" => {
-                    todo!();
+                    let target = args.peekable().peek().map_or("", |x| *x);
+                    let path = Path::new(target);
+                    if path.exists() {
+                        if path.is_dir() {
+                            println!("{} is a directory", path.display());
+                        } else {
+                            filesize::filesize(path.to_str().unwrap()); // HACK: ?
+                        }
+                    } else {
+                        println!("{} does not exist", path.display());
+                    }
                 }
                 "calc" => {
                     // need to parse any amount of args?
