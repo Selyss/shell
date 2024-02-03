@@ -95,13 +95,13 @@ fn main() {
                         println!("{} does not exist", path.display());
                     }
                 }
-                "calc" => {
-                    // need to parse any amount of args?
-                    todo!();
-                }
-                "rand" => {
-                    todo!();
-                }
+                // "calc" => {
+                //     // need to parse any amount of args?
+                //     todo!();
+                // }
+                // "rand" => {
+                //     todo!();
+                // }
                 "datetime" => {
                     let utc_time: DateTime<Utc> = Utc::now();
                     let local_time: DateTime<Local> = utc_time.with_timezone(&Local);
@@ -116,10 +116,11 @@ fn main() {
                         println!("{}", result);
                     }
                 }
-                "note" => {
-                    // and all the other shownotes and stuff
-                    todo!();
-                }
+                // TODO: need to save to local storage or just shell session
+                // "note" => {
+                //     // and all the other shownotes and stuff
+                //     todo!();
+                // }
                 "create" => {
                     let target = args.peekable().peek().map_or("", |x| *x);
                     let file = Path::new(target);
@@ -157,6 +158,7 @@ fn main() {
                         println!("{} does not exist", file.display());
                     }
                 }
+                // TODO: take in a command, tell the user how to execute that command in plain shell script on native os
                 "help" => {
                     todo!();
                 }
