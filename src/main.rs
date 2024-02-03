@@ -8,6 +8,7 @@ use std::process::{Child, Command, Stdio};
 use sysinfo::{CpuRefreshKind, RefreshKind, System};
 
 mod commands;
+use crate::commands::delete;
 use crate::commands::filesize;
 use crate::commands::filetype;
 use crate::commands::wordcount;
@@ -132,8 +133,9 @@ fn main() {
                     }
                 }
                 "delete" => {
-                    // make safer
-                    todo!();
+                    let target = args.peekable().peek().map_or("", |x| *x);
+                    let file = Path::new(target);
+                    delete::delete(file);
                 }
                 // "permissions" => {
                 //     todo!();
