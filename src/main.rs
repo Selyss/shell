@@ -1,3 +1,4 @@
+use chrono::{DateTime, Local, TimeZone, Utc};
 use std::env;
 use std::fs;
 use std::io;
@@ -43,6 +44,9 @@ fn main() {
                     let file: &Path = Path::new(target);
 
                     if file.exists() {
+                        if file.is_symlink() {
+                            println!("{} is a symlink", file.display());
+                        }
                         if file.is_dir() {
                             println!("{} is a directory", file.display());
                         } else {
@@ -87,7 +91,11 @@ fn main() {
                     todo!();
                 }
                 "datetime" => {
-                    todo!();
+                    let utc_time: DateTime<Utc> = Utc::now();
+                    let local_time: DateTime<Local> = utc_time.with_timezone(&Local);
+
+                    println!("UTC time: {}", utc_time);
+                    println!("Local time: {}", local_time);
                 }
                 "repeat" => {
                     let amount: &str = args.peekable().peek().map_or("", |x| *x);
@@ -98,19 +106,6 @@ fn main() {
                 }
                 "note" => {
                     // and all the other shownotes and stuff
-                    todo!();
-                }
-                "search" => {
-                    // IDK if i want to implement this myself. May just grep.
-                    todo!();
-                }
-                "rename" => {
-                    todo!();
-                }
-                "copy" => {
-                    todo!();
-                }
-                "move" => {
                     todo!();
                 }
                 "create" => {
@@ -148,12 +143,6 @@ fn main() {
                     } else {
                         println!("{} does not exist", file.display());
                     }
-                }
-                "alias" => {
-                    todo!();
-                }
-                "setenv" => {
-                    todo!();
                 }
                 "help" => {
                     todo!();
