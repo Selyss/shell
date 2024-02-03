@@ -135,12 +135,12 @@ fn main() {
                     // make safer
                     todo!();
                 }
-                "permissions" => {
-                    todo!();
-                }
-                "fileinfo" => {
-                    todo!();
-                }
+                // "permissions" => {
+                //     todo!();
+                // }
+                // "fileinfo" => {
+                //     todo!();
+                // }
                 "preview" => {
                     let target = args.peekable().peek().map_or("", |x| *x);
                     let file = Path::new(target);
