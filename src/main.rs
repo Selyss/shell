@@ -160,7 +160,7 @@ fn main() {
                 }
                 // TODO: take in a command, tell the user how to execute that command in plain shell script on native os
                 "help" => {
-                    todo!();
+                    todo!("not implemented yet");
                 }
                 "exit" => return,
                 command => {
