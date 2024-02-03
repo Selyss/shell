@@ -8,6 +8,7 @@ use sysinfo::{CpuRefreshKind, RefreshKind, System};
 
 mod commands;
 use crate::commands::filetype;
+use crate::commands::wordcount;
 
 fn main() {
     loop {
@@ -69,7 +70,7 @@ fn main() {
                         if path.is_dir() {
                             println!("{} is a directory", path.display());
                         } else {
-                            todo!();
+                            wordcount::wordcount(path.to_str().unwrap()); // HACK: ?
                         }
                     } else {
                         println!("{} does not exist", path.display());

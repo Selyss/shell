@@ -1,7 +1,8 @@
 use std::path::Path;
 
 pub fn file_extension(file: &Path) -> &str {
-    let extension: &str = file.to_str().and_then(|s| s.split('.').last()).unwrap();
+    let extension = file.extension().unwrap().to_str().unwrap(); // HACK: find better way to do this
+
     let filetype = match extension.to_lowercase().as_str() {
         // at some point for languages just say the extension again... or support idk
         "jpeg" | "jpg" => "JPEG image",
